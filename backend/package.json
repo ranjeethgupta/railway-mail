@@ -1,14 +1,14 @@
 {
-    "name": "visitor-logger-backend",
+    "name": "visitor-logger-monorepo",
+    "private": true,
     "type": "module",
+    "workspaces": [
+        "backend",
+        "frontend"
+    ],
     "scripts": {
-        "build:frontend": "cd frontend && npm ci --omit=dev && npm run build",
-        "railway-start": "npm run build:frontend && node server.js",
-        "start": "node server.js"
-    },
-    "dependencies": {
-        "express": "^4.19.2",
-        "cors": "^2.8.5",
-        "morgan": "^1.10.0"
+        "build:frontend": "npm --workspace frontend ci --omit=dev && npm --workspace frontend run build",
+        "build": "npm run build:frontend",
+        "start": "node backend/server.js"
     }
 }
