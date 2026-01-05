@@ -4,7 +4,9 @@
     "main": "server.js",
     "type": "module",
     "scripts": {
-        "start": "node server.js"
+        "build": "cd ../frontend && npm ci && npm run build",
+        "start": "node server.mjs",
+        "railway-start": "npm run build && node server.mjs"
     },
     "dependencies": {
         "cors": "^2.8.5",

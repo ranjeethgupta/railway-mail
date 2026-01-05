@@ -5,23 +5,19 @@ import path from 'path';
 import cors from 'cors';
 import morgan from 'morgan';
 import os from 'os';
-
 import { fileURLToPath } from 'url';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Serve static files from the Angular build folder
-app.use(express.static(path.join(__dirname, 'dist/frontend')));
-// Redirect all traffic to Angular's index.html (for SPA routing)
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist/frontend/index.html'));
-});
-
-
-const PORT = 3010;              // Backend port
+const PORT = process.env.PORT || 8080;
 const LOG_FILE = path.resolve('./visitor_log.txt');
+
+
+// Choose the ONE correct Angular build output directory:
+const DIST_PATH = path.resolve(__dirname, '../frontend/dist/frontend/browser'); // ✅ adjust if different
 
 // ensure log file exists
 fs.closeSync(fs.openSync(LOG_FILE, 'a'));
@@ -80,8 +76,15 @@ app.post('/track/action', (req, res) => {
     res.json({ ok: true });
 });
 
-// --- host the built Angular app (after you build it)
-app.use('/', express.static(path.resolve('../frontend/dist/browser')));
+
+// ---- serve Angular build ----
+console.log('DIST_PATH:', DIST_PATH, 'exists?', fs.existsSync(DIST_PATH));
+app.use(express.static(DIST_PATH));
+
+// SPA fallback (catch‑all) AFTER APIs and static:
+app.get('*', (req, res) => {
+    res.sendFile(path.join(DIST_PATH, 'index.html'));
+});
 
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Backend ready on http://0.0.0.0:${PORT}`);
