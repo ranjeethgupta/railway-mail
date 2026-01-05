@@ -17,7 +17,18 @@ const LOG_FILE = path.resolve('./visitor_log.txt');
 
 
 // Choose the ONE correct Angular build output directory:
-const DIST_PATH = path.resolve(__dirname, '../frontend/dist/frontend'); // ✅ adjust if different
+
+const candidates = [
+    path.resolve(__dirname, '../frontend/dist/browser'),
+    path.resolve(__dirname, '../frontend/dist/frontend'),
+    path.resolve(__dirname, 'dist/frontend'),
+];
+
+const FRONTEND_DIR = candidates.find(p => {
+    try { return require('fs').existsSync(path.join(p, 'index.html')); }
+    catch { return false; }
+});
+
 
 // ensure log file exists
 fs.closeSync(fs.openSync(LOG_FILE, 'a'));
@@ -78,8 +89,15 @@ app.post('/track/action', (req, res) => {
 
 
 // ---- serve Angular build ----
-console.log('DIST_PATH:', DIST_PATH, 'exists?', fs.existsSync(DIST_PATH));
-app.use(express.static(DIST_PATH));
+
+if (FRONTEND_DIR) {
+    app.use(express.static(FRONTEND_DIR));
+    app.get('*', (_req, res) => res.sendFile(path.join(FRONTEND_DIR, 'index.html')));
+    console.log(`Serving frontend from ${FRONTEND_DIR}`);
+} else {
+    console.warn('Frontend build not found. API-only mode.');
+}
+
 
 // SPA fallback (catch‑all) AFTER APIs and static:
 app.get('*', (req, res) => {
