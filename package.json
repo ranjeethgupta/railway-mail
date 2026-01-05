@@ -5,7 +5,7 @@
     "type": "module",
     "scripts": {
         "build": "cd ../frontend && npm ci && npm run build",
-        "start": "node server.mjs",
+        "start": "node server.js",
         "railway-start": "npm run build && node server.mjs"
     },
     "dependencies": {
