@@ -36,8 +36,8 @@ app.get('/health', (_req, res) => {
 // Update these candidates to match your framework and layout.
 
 const candidates = [
-    path.resolve(__dirname, 'frontend', 'dist', 'browser'), // Angular
-    path.resolve(__dirname, 'frontend', 'dist'),            // React/Vite
+    path.resolve(__dirname, '..', 'frontend', 'dist', 'browser'), // Angular
+    path.resolve(__dirname, '..', 'frontend', 'dist'),            // React/Vite
     path.resolve('/app', 'dist', 'frontend'),               // if you copy build here
 ];
 
