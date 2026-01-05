@@ -2,9 +2,9 @@
     "name": "visitor-logger-backend",
     "type": "module",
     "scripts": {
-        "start": "node server.js",
-        "build:frontend": "cd ../frontend && npm ci && npm run build",
-        "railway-start": "npm run build:frontend && node server.js"
+        "build:frontend": "cd frontend && npm ci --omit=dev && npm run build && mkdir -p ../dist/frontend && cp -r dist/* ../dist/frontend/",
+        "railway-start": "npm run build:frontend && node server.js",
+        "start": "node server.js"
     },
     "dependencies": {
         "express": "^4.19.2",
