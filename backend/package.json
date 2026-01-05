@@ -9,7 +9,7 @@
     "scripts": {
         "build:frontend": "npm --workspace frontend ci --omit=dev && npm --workspace frontend run build",
         "build": "npm run build:frontend",
-        "start": "node backend/server.js"
+        "start": "node server.js"
     },
     "engines": {
         "node": ">=18.0.0"
