@@ -34,27 +34,15 @@ app.get('/health', (_req, res) => {
 
 // Choose the ONE correct frontend build directory.
 // Update these candidates to match your framework and layout.
+
 const candidates = [
-    // If frontend folder is inside the same repo (recommended):
-    path.resolve(__dirname, 'frontend', 'dist', 'browser'), // Angular default
-    path.resolve(__dirname, 'frontend', 'dist'),            // React/Vite default
-
-    // If your server.js sits in /app/backend and the repo root has /frontend:
-    // path.resolve(__dirname, '..', 'frontend', 'dist', 'browser'),
-    // path.resolve(__dirname, '..', 'frontend', 'dist'),
-
-    // If you intentionally copy the build to /app/dist/frontend during build:
-    path.resolve('/app', 'dist', 'frontend'),
+    path.resolve(__dirname, 'frontend', 'dist', 'browser'), // Angular
+    path.resolve(__dirname, 'frontend', 'dist'),            // React/Vite
+    path.resolve('/app', 'dist', 'frontend'),               // if you copy build here
 ];
 
-// Find a candidate that contains index.html
-const FRONTEND_DIR = candidates.find((p) => {
-    try {
-        return fs.existsSync(path.join(p, 'index.html'));
-    } catch {
-        return false;
-    }
-});
+
+const FRONTEND_DIR = candidates.find(p => fs.existsSync(path.join(p, 'index.html')));
 
 // Static serving (SPA)
 if (FRONTEND_DIR) {
